@@ -1,0 +1,33 @@
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.6vh 1.5rem;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-brand {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+}
+
+.nav-links form {
+    display: inline;
+}
+
+.nav-user {
+    color: var(--text-muted);
+}

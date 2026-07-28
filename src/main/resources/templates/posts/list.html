@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse posts - Forum</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1 th:text="${categoryLabel != null} ? ${categoryLabel} : 'Posts'">Posts</h1>
+
+    <div class="actions">
+        <a class="tag" th:classappend="${category == null} ? 'tag-active'" th:href="@{/posts}">All topics</a>
+        <a class="tag" th:each="c : ${categories}"
+           th:classappend="${category == c.name()} ? 'tag-active'"
+           th:href="@{/posts(category=${c.name()})}" th:text="${c.displayName}">Category</a>
+    </div>
+
+    <form class="inline" th:action="@{/posts}" method="get">
+        <label>
+            Search
+            <input type="text" name="search" placeholder="Search title or content" th:value="${search}">
+        </label>
+        <label>
+            Tag
+            <input type="text" name="tag" placeholder="Filter by tag" th:value="${tag}">
+        </label>
+        <button type="submit">Apply</button>
+        <a class="btn secondary" th:href="@{/posts}">Clear</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th><a th:href="@{/posts(sort='title,asc')}">Title</a></th>
+            <th>Author</th>
+            <th>Tags</th>
+            <th>Comments</th>
+            <th>Likes</th>
+            <th><a th:href="@{/posts(sort='createdAt,desc')}">Created</a></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td><a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Title</a></td>
+            <td>
+                <span class="author-cell">
+                    <span th:replace="~{fragments/avatar :: avatar(${post.authorProfilePhotoUrl}, ${post.authorUsername})}"></span>
+                    <span th:text="${post.authorUsername}">author</span>
+                </span>
+            </td>
+            <td th:text="${#strings.listJoin(post.tags, ', ')}">tags</td>
+            <td th:text="${post.commentCount}">0</td>
+            <td th:text="${post.likeCount}">0</td>
+            <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">date</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(posts)}">
+            <td colspan="6">No posts found.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination" th:if="${page != null}">
+        <a th:if="${page.hasPrevious()}"
+           th:href="@{/posts(page=${page.number - 1}, search=${search}, tag=${tag}, category=${category})}">Previous</a>
+        <span th:text="'Page ' + ${page.number + 1} + ' of ' + ${page.totalPages}">Page</span>
+        <a th:if="${page.hasNext()}"
+           th:href="@{/posts(page=${page.number + 1}, search=${search}, tag=${tag}, category=${category})}">Next</a>
+    </div>
+</main>
+</body>
+</html>

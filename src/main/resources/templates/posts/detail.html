@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.title} + ' - Forum'">Post - Forum</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <article class="card">
+        <h1 th:text="${post.title}">Title</h1>
+        <p class="meta actions">
+            <span th:replace="~{fragments/avatar :: avatar(${post.authorProfilePhotoUrl}, ${post.authorUsername})}"></span>
+            by <a th:href="@{/users/{id}(id=${post.authorId})}" th:text="${post.authorUsername}">author</a> &middot;
+            <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">date</span>
+        </p>
+        <p th:text="${post.content}">Content</p>
+        <p>
+            <span class="tag" th:each="t : ${post.tags}">
+                <a th:href="@{/posts(tag=${t})}" th:text="${t}">tag</a>
+            </span>
+            <span class="meta" th:if="${#lists.isEmpty(post.tags)}">No tags</span>
+        </p>
+
+        <div class="actions">
+            <div sec:authorize="isAuthenticated()" class="actions">
+                <form th:action="@{/posts/{id}/like(id=${post.id})}" method="post">
+                    <button type="submit" class="secondary"
+                            th:text="${liked} ? 'Unlike' : 'Like'">Like</button>
+                </form>
+                <span class="meta" th:text="${post.likeCount} + ' like(s)'">0 likes</span>
+            </div>
+            <span class="meta" sec:authorize="!isAuthenticated()"
+                  th:text="${post.likeCount} + ' like(s)'">0 likes</span>
+
+            <div th:if="${canEdit}" class="actions">
+                <a class="btn secondary" th:href="@{/posts/{id}/edit(id=${post.id})}">Edit</a>
+                <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post">
+                    <button type="submit" class="danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </article>
+
+    <section class="card">
+        <h2 th:text="${#lists.size(comments)} + ' comment(s)'">Comments</h2>
+        <ul class="stack">
+            <li class="comment" th:each="c : ${comments}">
+                <span th:replace="~{fragments/avatar :: avatar(${c.authorProfilePhotoUrl}, ${c.authorUsername})}"></span>
+                <span class="comment-body">
+                    <strong th:text="${c.authorUsername}">author</strong>
+                    <span class="meta" th:text="${#temporals.format(c.createdAt, 'yyyy-MM-dd HH:mm')}">date</span>
+                    <p th:text="${c.content}">comment</p>
+                </span>
+            </li>
+        </ul>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/posts/{id}/comments(id=${post.id})}" method="post">
+            <textarea name="content" required maxlength="4096" placeholder="Add a comment"></textarea>
+            <button type="submit">Comment</button>
+        </form>
+        <p class="meta" sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Log in</a> to comment.</p>
+    </section>
+</main>
+</body>
+</html>

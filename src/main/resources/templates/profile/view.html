@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${profile.username} + ' - Forum'">Profile - Forum</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <div class="actions">
+        <img th:if="${profile.profilePhotoUrl != null}" th:src="@{${profile.profilePhotoUrl}}"
+             alt="Profile photo" class="avatar">
+        <img th:unless="${profile.profilePhotoUrl != null}" src="/images/chud.png"
+             alt="Profile photo" class="avatar">
+    </div>
+    <h1 th:text="${profile.username}">username</h1>
+    <p class="meta" th:text="${profile.firstName} + ' ' + ${profile.lastName}">Full name</p>
+    <p class="meta" th:if="${editable}" th:text="${profile.email}">email</p>
+    <p th:if="${profile.blocked}"><span class="badge blocked">Blocked</span></p>
+
+    <section class="card" th:if="${editable}">
+        <h2>Edit profile</h2>
+        <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
+            <label>
+                First name
+                <input type="text" name="firstName" th:value="${profile.firstName}" minlength="4" maxlength="32"
+                       required>
+            </label>
+            <label>
+                Last name
+                <input type="text" name="lastName" th:value="${profile.lastName}" minlength="4" maxlength="32"
+                       required>
+            </label>
+            <label>
+                Email
+                <input type="email" name="email" th:value="${profile.email}" required>
+            </label>
+            <label>
+                Phone number
+                <input type="text" name="phoneNumber" th:value="${profile.phoneNumber}">
+            </label>
+            <label>
+                Profile photo (JPEG, PNG, GIF or WEBP)
+                <input type="file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp">
+            </label>
+            <button type="submit">Save</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2 th:text="${editable} ? 'Your posts' : ${profile.username} + '\'s posts'">Posts</h2>
+        <ul class="stack">
+            <li th:each="post : ${posts}">
+                <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Title</a>
+            </li>
+            <li class="meta" th:if="${#lists.isEmpty(posts)}">No posts yet.</li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

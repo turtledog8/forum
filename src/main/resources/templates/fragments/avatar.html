@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<span th:fragment="avatar(photoUrl, username)" class="avatar-mini">
+    <img th:if="${photoUrl != null}" th:src="@{${photoUrl}}" th:alt="${username}" class="avatar-img">
+    <img th:unless="${photoUrl != null}" src="/images/chud.png" th:alt="${username}" class="avatar-img">
+</span>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* Root font-size is viewport-relative; every other size below is in rem/em/vh
+   (never px) so the whole UI scales with the window instead of being pixel-locked. */
+:root {
+    --font-base: 2.2vh;
+
+    --bg: #f5f6f8;
+    --bg-elevated: #ffffff;
+    --text: #1a1d23;
+    --text-muted: #5b6270;
+    --border: #dde1e7;
+    --accent: #2f6fed;
+    --accent-contrast: #ffffff;
+    --danger: #d64545;
+    --danger-contrast: #ffffff;
+    --success: #2f9e5c;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14161a;
+        --bg-elevated: #1d2025;
+        --text: #e8eaee;
+        --text-muted: #9aa1ad;
+        --border: #2c3038;
+        --accent: #5b8dfb;
+        --accent-contrast: #0c1220;
+        --danger: #e2685f;
+        --danger-contrast: #200a08;
+        --success: #4ccb88;
+    }
+}

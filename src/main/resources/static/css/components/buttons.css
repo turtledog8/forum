@@ -1,0 +1,29 @@
+button,
+.btn {
+    font: inherit;
+    padding: 0.55rem 1.1rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--accent-contrast);
+    cursor: pointer;
+}
+
+button:hover,
+.btn:hover {
+    filter: brightness(1.08);
+    text-decoration: none;
+}
+
+button.secondary,
+.btn.secondary {
+    background: transparent;
+    color: var(--accent);
+}
+
+button.danger,
+.btn.danger {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: var(--danger-contrast);
+}

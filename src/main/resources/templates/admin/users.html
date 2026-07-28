@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage users - Forum</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1>Manage users</h1>
+
+    <form class="inline" th:action="@{/admin/users}" method="get">
+        <label>
+            Search
+            <input type="text" name="query" placeholder="Username, email or first name" th:value="${query}">
+        </label>
+        <button type="submit">Search</button>
+        <a class="btn secondary" th:href="@{/admin/users}">Clear</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.username}">username</td>
+            <td th:text="${u.firstName} + ' ' + ${u.lastName}">name</td>
+            <td th:text="${u.email}">email</td>
+            <td><span class="badge" th:text="${u.role}">role</span></td>
+            <td><span class="badge" th:classappend="${u.blocked} ? 'blocked'"
+                       th:text="${u.blocked} ? 'Blocked' : 'Active'">status</span></td>
+            <td>
+                <form th:if="${u.role.name() == 'USER'}" th:action="@{/admin/users/{id}/promote(id=${u.id})}"
+                      method="post">
+                    <button type="submit" class="secondary">Promote</button>
+                </form>
+                <form th:if="${!u.blocked}" th:action="@{/admin/users/{id}/block(id=${u.id})}" method="post">
+                    <button type="submit" class="danger">Block</button>
+                </form>
+                <form th:if="${u.blocked}" th:action="@{/admin/users/{id}/unblock(id=${u.id})}" method="post">
+                    <button type="submit">Unblock</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(users)}">
+            <td colspan="6">No users found.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination" th:if="${page != null}">
+        <a th:if="${page.hasPrevious()}" th:href="@{/admin/users(page=${page.number - 1}, query=${query})}">Previous</a>
+        <span th:text="'Page ' + ${page.number + 1} + ' of ' + ${page.totalPages}">Page</span>
+        <a th:if="${page.hasNext()}" th:href="@{/admin/users(page=${page.number + 1}, query=${query})}">Next</a>
+    </div>
+</main>
+</body>
+</html>

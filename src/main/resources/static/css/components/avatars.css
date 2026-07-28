@@ -1,0 +1,20 @@
+.avatar-mini {
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+
+.comment {
+    align-items: flex-start !important;
+}
+
+.comment .comment-body {
+    flex: 1;
+}

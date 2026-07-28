@@ -1,0 +1,52 @@
+.error-list {
+    background: color-mix(in srgb, var(--danger) 12%, var(--bg-elevated));
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+}
+
+.badge.blocked {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.avatar {
+    width: 12vh;
+    height: 12vh;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+}
+
+.meta {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}

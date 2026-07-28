@@ -1,0 +1,19 @@
+.card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-strip {
+    display: flex;
+    gap: 2rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.stat-strip strong {
+    color: var(--text);
+    font-size: 1.2rem;
+}

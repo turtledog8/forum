@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${editing} ? 'Edit post - Forum' : 'New post - Forum'">Post form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1 th:text="${editing} ? 'Edit post' : 'New post'">Post form</h1>
+
+    <div th:object="${post}">
+    <ul class="error-list" th:if="${#fields.hasErrors('*')}">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Error</li>
+    </ul>
+
+    <form class="card" th:if="${!editing}" th:action="@{/posts}" th:object="${post}" method="post">
+        <label>
+            Title (16-64 characters)
+            <input type="text" th:field="*{title}" minlength="16" maxlength="64" required>
+        </label>
+        <label>
+            Content (32-8192 characters)
+            <textarea th:field="*{content}" minlength="32" maxlength="8192" required></textarea>
+        </label>
+        <button type="submit">Create post</button>
+    </form>
+
+    <form class="card" th:if="${editing}" th:action="@{/posts/{id}/edit(id=${post.id})}" th:object="${post}"
+          method="post">
+        <label>
+            Title (16-64 characters)
+            <input type="text" th:field="*{title}" minlength="16" maxlength="64" required>
+        </label>
+        <label>
+            Content (32-8192 characters)
+            <textarea th:field="*{content}" minlength="32" maxlength="8192" required></textarea>
+        </label>
+        <button type="submit">Save changes</button>
+    </form>
+    </div>
+
+    <section class="card" th:if="${editing}">
+        <h2>Tags</h2>
+        <p>
+            <form class="tag" th:each="t : ${post.tags}" th:with="tagName=${t.name}"
+                  th:action="@{/posts/{id}/tags/delete(id=${post.id})}" method="post">
+                <span th:text="${tagName}">tag</span>
+                <input type="hidden" name="tagName" th:value="${tagName}">
+                <button type="submit" title="Remove tag">&times;</button>
+            </form>
+        </p>
+        <form class="inline" th:action="@{/posts/{id}/tags(id=${post.id})}" method="post">
+            <input type="text" name="tagName" placeholder="Add a tag" required>
+            <button type="submit">Add tag</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>
